@@ -22,7 +22,7 @@ jobs:
 
     - name: Bump Dependencies
       run: |
-        python update-req.py '${{ github.event.client_payload.repository }}' '${{ github.event.client_payload.package_name }}'
+        python update_req.py '${{ github.event.client_payload.repository }}' '${{ github.event.client_payload.package_name }}'
 
     - name: Commit changes
       run: |
