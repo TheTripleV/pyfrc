@@ -5,7 +5,7 @@ on: [push, pull_request, repository_dispatch]
 
 jobs:
   check:
-    if: github.event_name == 'repository_dispatch' && github.event.action == 'pub'
+    if: (github.event_name != 'repository_dispatch' || github.event.action != 'pub')
     runs-on: ubuntu-latest
     
     steps:
