@@ -11,37 +11,37 @@ jobs:
     - name: Information
       run: |
         echo "'${{ github.event.action }}' received from '${{ github.event.client_payload.repository }}'"
-    # - uses: actions/checkout@v2
-    # - uses: actions/setup-python@v1
-    #   with:
-    #     python-version: 3.8
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
 
-    # - name: Install Dependencies
-    #   run: |
-    #     pip install gitpython
+    - name: Install Dependencies
+      run: |
+        pip install gitpython
 
-    # - name: Bump Requirements
-    #   run: |
-    #     python update_req.py '${{ github.event.client_payload.repository }}' '${{ github.event.client_payload.package_name }}'
+    - name: Bump Requirements
+      run: |
+        python update_req.py '${{ github.event.client_payload.repository }}' '${{ github.event.client_payload.package_name }}'
 
-    # - name: Commit changes
-    #   run: |
-    #     git config --local user.email "action@github.com"
-    #     git config --local user.name "Github Action"
-    #     git add requirements.txt
-    #     git commit -m "Bump '${{ github.event.client_payload.package_name }}' dependency"
+    - name: Commit changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "Github Action"
+        git add requirements.txt
+        git commit -m "Bump '${{ github.event.client_payload.package_name }}' dependency"
 
-    # - name: Push changes
-    #   uses: ad-m/github-push-action@master
-    #   with:
-    #     github_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
 
-    # - name: Bump Version and push Tag
-    #   uses: anothrNick/github-tag-action@master
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #     WTIH_V: false
-    #     DEFAULT_BUMP: patch
+    - name: Bump Version and push Tag
+      uses: anothrNick/github-tag-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        WTIH_V: false
+        DEFAULT_BUMP: patch
     - name: Ping ourselves to push
       run: |
         curl -X POST https://api.github.com/repos/TheTripleV/pyfrc/dispatches \
