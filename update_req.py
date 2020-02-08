@@ -66,7 +66,7 @@ def main():
 
 
 def getCurrentVersion(line: str):
-    stripped_line = line.strip(["\r", "\n", "\r\n", " "])  # remove newlines and spaces
+    stripped_line = line.strip("\r\n\t ")  # remove newlines, tabs and spaces
 
     v_start = stripped_line.find(">=") + 2
     v_end = stripped_line.find(",")
@@ -74,8 +74,8 @@ def getCurrentVersion(line: str):
         v_end = len(stripped_line)
 
     v = stripped_line[v_start:v_end].strip(
-        ["\r", "\n", "\r\n", " "]
-    )  # remove newlines and spaces
+        "\r\n\t "
+    )  # remove newlines, tabs and spaces
     return v
 
 
