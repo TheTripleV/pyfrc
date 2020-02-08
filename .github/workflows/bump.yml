@@ -36,26 +36,26 @@ jobs:
         git commit -m "Bump '${{ github.event.client_payload.package_name }}' dependency"
         git push
 
-    - name: Bump Tag
-      run: |
-        git pull
-        git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-        VERSION=`git describe --tags --abbrev=0 | awk -F. '{$NF+=1; OFS="."; print $0}'`
-        git tag $VERSION
-        git push --tags    
+    # - name: Bump Tag
+    #   run: |
+    #     git pull
+    #     git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+    #     VERSION=`git describe --tags --abbrev=0 | awk -F. '{$NF+=1; OFS="."; print $0}'`
+    #     git tag $VERSION
+    #     git push --tags    
 
     # - name: Push changes
     #   uses: ad-m/github-push-action@master
     #   with:
     #     github_token: ${{ secrets.GITHUB_TOKEN }}
 
-    # - name: Bump Version and push Tag
-    #   uses: mathieudutour/github-tag-action@v3
-    #   env:
-    #     github_token: ${{ secrets.GITHUB_TOKEN }}
-    #     create_annotated_tag: true
-    #     default_bump: patch
-    #     tag_prefix: ""
+    - name: Bump Version and push Tag
+      uses: anothrNick/github-tag-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.PYFRC_ACCESS_TOKEN }}
+        DEFAULT_BUMP: patch
+        WITH_V: false
+
     # - name: Ping ourselves to push
     #   run: |
     #     curl -X POST https://api.github.com/repos/TheTripleV/pyfrc/dispatches \
