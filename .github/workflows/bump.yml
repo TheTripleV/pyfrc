@@ -20,7 +20,7 @@ jobs:
       run: |
         pip install gitpython
 
-    - name: Bump Dependencies
+    - name: Bump Requirements
       run: |
         python update_req.py '${{ github.event.client_payload.repository }}' '${{ github.event.client_payload.package_name }}'
 
@@ -31,8 +31,10 @@ jobs:
         git add requirements.txt
         git commit -m "Bump '${{ github.event.client_payload.package_name }}' dependency"
 
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
+    - name: Bump Version and push Tag
+      uses: anothrNick/github-tag-action@master
+      env:
         github_token: ${{ secrets.GITHUB_TOKEN }}
+        WTIH_V: false
+        DEFAULT_BUMP: patch
 
