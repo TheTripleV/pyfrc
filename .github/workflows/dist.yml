@@ -23,15 +23,6 @@ jobs:
     if: github.event_name == 'repository_dispatch' && github.event.action == 'tag'
     runs-on: ubuntu-latest
     steps:
-    - name: Better if
-      run: |
-        if ["${{ github.event_name }}" == "repository_dispatch"] && ["${{ github.event.action }}" == "tag"]; then
-          echo "Variables match, continuing..."
-        else
-          echo "Variables do not match. This job won't run (but will return success)"
-          exit 0
-        fi
-
     - name: Information
       run: |
         echo "'${{ github.event.action }}' received from '${{ github.event.client_payload.repository }}'"
@@ -69,7 +60,7 @@ jobs:
 
 
   publish:
-    if: (github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')) || (github.event_name == 'repository_dispatch' && github.event.action == 'tag')
+    # if: (github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')) || (github.event_name == 'repository_dispatch' && github.event.action == 'tag')
     runs-on: ubuntu-latest
     needs: [check, bump]
 
