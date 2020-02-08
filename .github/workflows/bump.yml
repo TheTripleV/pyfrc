@@ -13,6 +13,8 @@ jobs:
       run: |
         echo "'${{ github.event.action }}' received from '${{ github.event.client_payload.repository }}'"
     - uses: actions/checkout@v2
+      with:
+        token: ${{ secrets.PYFRC_ACCESS_TOKEN }}
     - uses: actions/setup-python@v1
       with:
         python-version: 3.8
@@ -25,28 +27,48 @@ jobs:
       run: |
         python update_req.py '${{ github.event.client_payload.repository }}' '${{ github.event.client_payload.package_name }}'
 
-    - name: Commit changes
+    - name: Push changes
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "Github Action"
         git add requirements.txt
         git commit -m "Bump '${{ github.event.client_payload.package_name }}' dependency"
+        git push
 
-    - name: Push changes
-      uses: ad-m/github-push-action@master
+    - name: Get Previous tag
+        id: previoustag
+        uses: WyriHaximus/github-action-get-previous-tag@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Get next tag version
+      id: semvers
+      uses: WyriHaximus/github-action-next-semvers@master
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        version: ${{ steps.previoustag.outputs.tag }}
 
-    - name: Bump Version and push Tag
-      uses: mathieudutour/github-tag-action@v3
-      env:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        create_annotated_tag: true
-        default_bump: patch
-        tag_prefix: ""
-    - name: Ping ourselves to push
+    - name: Push New Tag
       run: |
-        curl -X POST https://api.github.com/repos/TheTripleV/pyfrc/dispatches \
-            -H 'Accept: application/vnd.github.everest-preview+json' \
-            -u TheTripleV:${{ secrets.PYFRC_ACCESS_TOKEN }} \
-            --data '{"event_type": "pub", "client_payload": { "msg": "publish action"}}'
+        git tag ${{ steps.semvers.outputs.patch }}
+        git push --tags
+
+        
+
+    # - name: Push changes
+    #   uses: ad-m/github-push-action@master
+    #   with:
+    #     github_token: ${{ secrets.GITHUB_TOKEN }}
+
+    # - name: Bump Version and push Tag
+    #   uses: mathieudutour/github-tag-action@v3
+    #   env:
+    #     github_token: ${{ secrets.GITHUB_TOKEN }}
+    #     create_annotated_tag: true
+    #     default_bump: patch
+    #     tag_prefix: ""
+    # - name: Ping ourselves to push
+    #   run: |
+    #     curl -X POST https://api.github.com/repos/TheTripleV/pyfrc/dispatches \
+    #         -H 'Accept: application/vnd.github.everest-preview+json' \
+    #         -u TheTripleV:${{ secrets.PYFRC_ACCESS_TOKEN }} \
+    #         --data '{"event_type": "pub", "client_payload": { "msg": "publish action"}}'

@@ -1,11 +1,10 @@
 ---
 name: dist
 
-on: [push, pull_request, repository_dispatch]
+on: [push, pull_request]
 
 jobs:
   check:
-    if: (github.event_name != 'repository_dispatch' || github.event.action != 'tag')
     runs-on: ubuntu-latest
     
     steps:
@@ -20,7 +19,7 @@ jobs:
         black --check --diff .
 
   publish:
-    if: (github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')) || (github.event_name == 'repository_dispatch' && github.event.action == 'pub')
+    if: (github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags'))
     runs-on: ubuntu-latest
     needs: [check]
 
