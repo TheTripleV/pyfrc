@@ -5,7 +5,7 @@ on: [push, pull_request, repository_dispatch]
 
 jobs:
   check:
-    if: github.event_name != 'repository_dispatch'
+    # if: github.event_name != 'repository_dispatch'
     runs-on: ubuntu-latest
     
     steps:
