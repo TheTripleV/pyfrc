@@ -35,24 +35,11 @@ jobs:
         git commit -m "Bump '${{ github.event.client_payload.package_name }}' dependency"
         git push
 
-    - name: Get Previous tag
-      id: previoustag
-      uses: WyriHaximus/github-action-get-previous-tag@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Get next tag version
-      id: semvers
-      uses: WyriHaximus/github-action-next-semvers@master
-      with:
-        version: ${{ steps.previoustag.outputs.tag }}
-
-    - name: Push New Tag
+    - name: Bump Tag
       run: |
-        git tag ${{ steps.semvers.outputs.patch }}
-        git push --tags
-
-        
+        VERSION=`git describe --tags --abbrev=0 | awk -F. '{$NF+=1; OFS="."; print $0}'`
+        git tag $VERSION
+        git push --tags    
 
     # - name: Push changes
     #   uses: ad-m/github-push-action@master
