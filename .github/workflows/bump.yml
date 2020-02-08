@@ -37,6 +37,7 @@ jobs:
 
     - name: Bump Tag
       run: |
+        git fetch --depth=1 origin +refs/tags/*:refs/tags/*
         VERSION=`git describe --tags --abbrev=0 | awk -F. '{$NF+=1; OFS="."; print $0}'`
         git tag $VERSION
         git push --tags    
