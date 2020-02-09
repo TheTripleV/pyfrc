@@ -1,6 +1,4 @@
 import sys
-import git
-
 
 def main():
     package_name = sys.argv[1]  # Ex. robotpy/robotpy-wpilib
@@ -12,7 +10,7 @@ def main():
     lower_bound = package_version
     print("Latest Version:", lower_bound)
 
-    upper_bound = getNextMajorVersion(version)
+    upper_bound = getNextMajorVersion(lower_bound)
     print("Next Major Version:", upper_bound)
 
     # Read requirements
