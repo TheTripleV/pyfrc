@@ -26,7 +26,7 @@ jobs:
 
     - name: Bump Requirements
       run: |
-        python update_req.py '${{ github.event.client_payload.repository }}' '${{ github.event.client_payload.package_name }}'
+        python update_req.py '${{ github.event.client_payload.package_name }}' '${{ github.event.client_payload.package_version }}'
 
     - name: Push changes
       run: |
